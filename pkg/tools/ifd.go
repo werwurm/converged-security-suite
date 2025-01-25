@@ -9,7 +9,7 @@ import (
 	"github.com/linuxboot/fiano/pkg/fmap"
 	"github.com/linuxboot/fiano/pkg/uefi"
 
-	"github.com/9elements/converged-security-suite/v2/pkg/uefi/consts"
+	"github.com/werwurm/bg-prov/pkg/uefi/consts"
 )
 
 func getCorebootRegion(image []byte) (uint32, uint32, error) {

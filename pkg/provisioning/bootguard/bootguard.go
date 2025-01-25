@@ -9,8 +9,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/9elements/converged-security-suite/v2/pkg/tools"
-	"github.com/9elements/converged-security-suite/v2/pkg/uefi/consts"
 	"github.com/linuxboot/fiano/pkg/cbfs"
 	"github.com/linuxboot/fiano/pkg/intel/metadata/bg"
 	"github.com/linuxboot/fiano/pkg/intel/metadata/bg/bgbootpolicy"
@@ -22,6 +20,8 @@ import (
 	"github.com/linuxboot/fiano/pkg/intel/metadata/fit"
 	"github.com/linuxboot/fiano/pkg/uefi"
 	"github.com/tidwall/pretty"
+	"github.com/werwurm/bg-prov/pkg/tools"
+	"github.com/werwurm/bg-prov/pkg/uefi/consts"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -979,33 +979,6 @@ func (b *BootGuard) IBBsMatchBPMDigest(image []byte) (bool, error) {
 	case bgheader.Version20:
 		if err := b.VData.CBNTbpm.ValidateIBB(firmware); err != nil {
 			return false, fmt.Errorf("bpm final ibb hash doesn't match selected measurements in image")
-		}
-	}
-	return true, nil
-}
-
-// ValidateMEAgainstManifests validates during runtime ME configuation with BootGuard KM & BPM manifests
-func (b *BootGuard) ValidateMEAgainstManifests(fws *FirmwareStatus6) (bool, error) {
-	switch b.Version {
-	case bgheader.Version10:
-		if fws.BPMSVN != uint32(b.VData.BGbpm.BPMSVN) {
-			return false, fmt.Errorf("bpm svn doesn't match me configuration")
-		}
-		if fws.KMSVN != uint32(b.VData.BGkm.KMSVN) {
-			return false, fmt.Errorf("km svn doesn't match me configuration")
-		}
-		if fws.KMID != uint32(b.VData.BGkm.KMID) {
-			return false, fmt.Errorf("km KMID doesn't match me configuration")
-		}
-	case bgheader.Version20:
-		if fws.BPMSVN > uint32(b.VData.CBNTbpm.BPMSVN) {
-			return false, fmt.Errorf("bpm svn doesn't match me configuration")
-		}
-		if fws.KMSVN != uint32(b.VData.CBNTkm.KMSVN) {
-			return false, fmt.Errorf("km svn doesn't match me configuration")
-		}
-		if fws.KMID != uint32(b.VData.CBNTkm.KMID) {
-			return false, fmt.Errorf("km KMID doesn't match me configuration")
 		}
 	}
 	return true, nil

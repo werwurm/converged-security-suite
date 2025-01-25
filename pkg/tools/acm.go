@@ -162,34 +162,6 @@ func (a *ACM) UUID() string {
 		a.Info.UUID.Field5[5])
 }
 
-// ValidateACMHeader validates an ACM Header found in the Firmware Interface Table (FIT)
-func (a *ACM) ValidateACMHeader() (bool, error) {
-	if a.Header == nil {
-		return false, fmt.Errorf("ACM structure not available, input leads to parser error")
-	}
-	if uint16(a.Header.GetModuleType()) != uint16(2) {
-		return false, fmt.Errorf("BIOS ACM ModuleType is not 2, this is not specified")
-	}
-	// Early version of TXT used an enum in ModuleSubType
-	// That was changed to flags. Check if unsupported flags are present
-	if a.Header.GetModuleSubType() > (ACMModuleSubtypeAncModule | ACMModuleSubtypeCapableOfExecuteAtReset) {
-		return false, fmt.Errorf("BIOS ACM ModuleSubType contains unknown flags")
-	}
-	if uint32(a.Header.GetHeaderLen()) < uint32(ACMheaderLen) {
-		return false, fmt.Errorf("BIOS ACM HeaderLength is smaller than 4*161 Byte")
-	}
-	if a.Header.GetSize().Size() == 0 {
-		return false, fmt.Errorf("BIOS ACM Size can't be zero")
-	}
-	if a.Header.GetModuleVendor() != ACMVendorIntel {
-		return false, fmt.Errorf("AC Module Vendor is not Intel. Only Intel as Vendor is allowed")
-	}
-	if a.Header.GetScratchSize() > a.Header.GetSize() {
-		return false, fmt.Errorf("ACM ScratchSize is bigger than ACM module size")
-	}
-	return true, nil
-}
-
 func (a *ACM) ParseACMInfo() error {
 	userArea := bytes.NewReader(a.Header.UserArea)
 	if err := binary.Read(userArea, binary.LittleEndian, &a.Info); err != nil {

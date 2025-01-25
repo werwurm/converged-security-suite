@@ -18,8 +18,8 @@ import (
 
 	"github.com/linuxboot/fiano/pkg/uefi"
 
-	"github.com/9elements/converged-security-suite/v2/pkg/provisioning/bootguard"
-	"github.com/9elements/converged-security-suite/v2/pkg/tools"
+	"github.com/werwurm/bg-prov/pkg/provisioning/bootguard"
+	"github.com/werwurm/bg-prov/pkg/tools"
 )
 
 type context struct {

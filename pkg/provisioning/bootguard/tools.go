@@ -6,8 +6,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/9elements/converged-security-suite/v2/pkg/tools"
 	"github.com/linuxboot/fiano/pkg/intel/metadata/fit"
+	"github.com/werwurm/bg-prov/pkg/tools"
 )
 
 // WriteCBnTStructures takes a firmware image and extracts boot policy manifest, key manifest and acm into separate files.
